@@ -9,7 +9,7 @@ static const int STRING_LIKE = 2;
 static const int FLOAT_LIKE = 3;
 
 int CheckSuspiciousIntArray(int a[], int n){
-    //¼ì²éÒÉËÆÖ¸Õë
+    //æ£€æŸ¥ç–‘ä¼¼æŒ‡é’ˆ
     for(int i=0;i<n;i++){
         if(a[i]<0x100000){continue;}
         int count=0;
@@ -19,7 +19,7 @@ int CheckSuspiciousIntArray(int a[], int n){
                 count+=1;
                 if(
                     //#1_begin------------
-                    a[i]%4!=0&&a[i] >= 0x100000          // <--µÚ1¿Õ, ÇëÌîĞ´Ò»¸öÊÊµ±µÄÅĞ¶ÏÌõ¼ş, ±¾ĞĞÉÏ·½ÇĞÎğ²åÈë¿ÕĞĞ
+                    a[j]%4!=0&&a[j] >= 0x100000          // <--ç¬¬1ç©º, è¯·å¡«å†™ä¸€ä¸ªé€‚å½“çš„åˆ¤æ–­æ¡ä»¶, æœ¬è¡Œä¸Šæ–¹åˆ‡å‹¿æ’å…¥ç©ºè¡Œ
                     //#1_end==============
                 ){
                     has_bad_number=1;
@@ -31,27 +31,27 @@ int CheckSuspiciousIntArray(int a[], int n){
             return i*4+POINTER_LIKE;
         }
     }
-    //¼ì²éÒÉËÆ×Ö·û´®
+    //æ£€æŸ¥ç–‘ä¼¼å­—ç¬¦ä¸²
     for(int i=0;i<n;i++){
         int count=0;
         for(int j=0;j<4;j++){
             int char_j=(a[i]>>(j*8))&0xff;
             //#2_begin------------
-            count += ((char_j >= 32 && char_j <= 126) || char_j == 9 || char_j == 10) ? 1 : 0;                  // <--µÚ2¿Õ, ÇëÊÊµ±µØ¸üĞÂcount±äÁ¿, ±¾ĞĞÉÏ·½ÇĞÎğ²åÈë¿ÕĞĞ
+            count += ((char_j >= 32 && char_j <= 126) || char_j == 9 || char_j == 10) ? 1 : 0;                  // <--ç¬¬2ç©º, è¯·é€‚å½“åœ°æ›´æ–°countå˜é‡, æœ¬è¡Œä¸Šæ–¹åˆ‡å‹¿æ’å…¥ç©ºè¡Œ
             //#2_end==============
         }
         if(count>=4){
             return i*4+STRING_LIKE;
         }
     }
-    //¼ì²éÒÉËÆ¸¡µã
+    //æ£€æŸ¥ç–‘ä¼¼æµ®ç‚¹
     int count=0;
     for(int i=0;i<n;i++){
         if(
             (a[i]&0x7fffffff)==0||
             //#3_begin------------
-            ((a[i]&0x7fffffff)>>23) >=120&&((a[i]&0x7fffffff)>>23) <= 134  // <--µÚ3¿Õ, ÇëÊÊµ±µØ²¹È«Ìõ¼şÅĞ¶Ï, ±¾ĞĞÉÏ·½ÇĞÎğ²åÈë¿ÕĞĞ
-            //»¹¿ÉÒÔĞ´³É£º(a[i]&0x7fffffff) >= (120<<23) && (a[i]&0x7fffffff) <= (134<<23)
+            ((a[i]&0x7fffffff)>>23) >=120&&((a[i]&0x7fffffff)>>23) <= 134  // <--ç¬¬3ç©º, è¯·é€‚å½“åœ°è¡¥å…¨æ¡ä»¶åˆ¤æ–­, æœ¬è¡Œä¸Šæ–¹åˆ‡å‹¿æ’å…¥ç©ºè¡Œ
+            //è¿˜å¯ä»¥å†™æˆï¼š(a[i]&0x7fffffff) >= (120<<23) && (a[i]&0x7fffffff) <= (134<<23)
             //#3_end==============
         ){
             count++;
@@ -64,7 +64,7 @@ int CheckSuspiciousIntArray(int a[], int n){
     }
 }
 
-//¸ºÔğÆÀ²â¼°Õ¹Ê¾½á¹ûµÄ´úÂë£¬¿ÉÒÔ²»ÓÃÍêÈ«Àí½â
+//è´Ÿè´£è¯„æµ‹åŠå±•ç¤ºç»“æœçš„ä»£ç ï¼Œå¯ä»¥ä¸ç”¨å®Œå…¨ç†è§£
 void CheckMemoryAndFormatResult(const void* mem,size_t size){
     int n=size/sizeof(int);
     assert((size_t)n*sizeof(int)==size);
